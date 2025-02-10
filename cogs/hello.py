@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 class hello(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.str = ['hello', 'Hello','hi','Hi']
         
-    # Read message
+    # Read message, check wheter in list, return "Hello"
     @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
+    async def on_message(self, message: discord.Message) -> None :
         if(message.author == self.bot.user):
             return
         else:
