@@ -1,6 +1,11 @@
 # Discord Bot
 
+## Commands
 
+        ex:    !OuO
+
+
+- OuO : print OuO
 
 ## Reference
 
