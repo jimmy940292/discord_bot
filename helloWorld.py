@@ -1,42 +1,38 @@
 import discord
+from discord.ext import commands
 
 
+def get_token() -> str:
 
-# Refer to 
-# https://hackmd.io/@smallshawn95/python_discord_bot_base
+    with open('.token.txt', 'r') as token_file:
+        return token_file.read().strip()
 
 
-def getToken() ->str:
+intents = discord.Intents.all()
+intents.message_content = True
+client = discord.Client(intents=intents)
+
+
+async def on_ready() -> None:
+    print(f'目前登入身份 --> {client.user}')
+
+
+async def on_message(message: discord.Message) -> None:
+    if message.author == client.user:
+        return
+    if message.content == 'Hello':
+        await message.channel.send('Hello world!')
+
+
+client.on_ready = on_ready
+client.on_message = on_message
+
+
+def main() -> None:
     
-    file = open(".token.txt")
-    token = ''
-    for lines in file:
-        token += lines
-        
-    return token
-
-
-
-
-def main():
-    intents = discord.Intents.default()
-    intents.message_content = True
-    client = discord.Client(intents= intents)
-    token = getToken()
-    
-    @client.event
-    async def on_ready():
-        print(f'目前登入身份 --> {client.user}')
-        
-    @client.event
-    async def on_message(message):
-        if message.author == client.user:
-            return
-        if message.content == 'Hello':
-            await message.channel.send('Hello world!')
-    
+    token = get_token()
     client.run(token)
-    
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()
