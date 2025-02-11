@@ -1,16 +1,19 @@
 import discord
 import json
+import os.path
 from discord.ext import commands
 from discord import app_commands
 
-class addName(commands.Cog):
+class opgg(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.filename = 'files/id_mapping.json'
         self.dic = {}
+        self.readIdMapping()
         
     # Read id mapping from file
     def readIdMapping(self) -> None:
+
         with open(self.filename, 'r') as f:
             data = json.load(f)
             for key, value in data.items():
@@ -25,20 +28,20 @@ class addName(commands.Cog):
         with open(self.filename, 'w') as f:
             f.write(json.dumps(self.dic))
         
-    # Add name into dictionary
-    @app_commands.command(name='addname', description='add user name for Riot ID')
-    @app_commands.describe(name = "Discord name", id = "Riot id")
-    async def addName(self, interaction: discord.Interaction, name: str, id: str) -> None:
-    
-        await interaction.response.send_message(content=f"{name} : {id}")
-        
+    # Search riot id with discord name
+    @app_commands.command(name='opgg', description='add user name for Riot ID')
+    @app_commands.describe(name = "Discord name")
+    async def opgg(self, interaction: discord.Interaction, name: str) -> None :
+        # Get data
         self.readIdMapping()
         
-        if(name not in self.dic or self.dic[name] != id):
-            self.dic[name] = id
+        if(name in self.dic): 
+            riotId = self.dic[name]
+            await interaction.response.send_message(f"{name} : {riotId}")
+        else:
+            return 
         
-        self.writeIdMapping()
 
 # Load Cog
 async def setup(bot: commands.Bot):
-    await bot.add_cog(addName(bot))       
+    await bot.add_cog(opgg(bot))       

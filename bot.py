@@ -3,15 +3,30 @@ import asyncio
 import discord
 from discord.ext import commands
 
+
 # Get token from file
 def get_token() -> str:
     with open('.token.txt', 'r') as token_file:
         return token_file.read()
+    
+'''
+Change help command
+ref: https://stackoverflow.com/questions/64092921/how-do-i-put-discord-py-help-command-in-an-embed
+'''
+
+class MyHelpCommand(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        e = discord.Embed(color=discord.Color.blurple(), description='')
+        for page in self.paginator.pages:
+                e.description += page
+        await destination.send(embed=e)
 
 
 intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix = '!', intents= intents)
+bot.help_command = MyHelpCommand() # change help command
 
 # Ready 
 @bot.event
