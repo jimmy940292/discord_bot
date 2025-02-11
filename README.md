@@ -2,10 +2,11 @@
 
 ## Commands
 
-        ex:    !OuO
+        ex:    /OuO
 
 
-- OuO : print OuO
+- OuO : print OuO and send figure
+- echo: echo input words
 
 ## Reference
 
